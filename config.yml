@@ -1,0 +1,18 @@
+targetmsg: '&a%sender% -> YOU -> &r&o%msg%'
+sendermsg: '&aYOU -> %target% -> &r&o%msg%'
+replymsg: '&a%sender% -> YOU -> &r&o%msg%'
+replysendermsg: '&aYOU -> %target% -> &r&o%msg%'
+noargsreply: '&cYou must supply a message! Usage: /r <msg>'
+notonlinereply: '&cYou have no one to reply too!'
+noargsmsg: '&cYou must supply a player name and message! Usage: /msg <player> <msg>'
+notonlinemsg: '&cThat player is not online! Usage: /msg <player> <msg>'
+sendingtoself: '&cYou cannot message yourself silly! Usage: /msg <player> <msg>'
+use-staff-chat: true
+staff-chat-not-enabled: '&fUnknown command. Type "/help" for help.'
+staffchat:
+  enabled: '&c&l[&r&fSC&c&l]&r&7 StaffChat has been enabled!'
+  disabled: '&c&l[&r&fSC&c&l]&r&7 StaffChat has been disabled!'
+  format: '&c&l[&r&fSC&c&l]&r&7 %player%&b:&f %msg%'
+chat:
+  disabled: '&c&lChat was disabled by %sender%!'
+  enabled: '&c&lChat was enabled by %sender%!'
