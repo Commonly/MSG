@@ -8,7 +8,7 @@ import me.jdog.msg.Main;
 import me.jdog.msg.other.commands.Options;
 
 public class Join implements Listener {
-	
+
 	Main plugin;
 
 	public Join(Main pl) {
@@ -17,7 +17,7 @@ public class Join implements Listener {
 
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
-		if(!plugin.dataManager.getData().isSet("auto"))
+		if (!plugin.dataManager.getData().isSet("auto"))
 			return;
 		if (Options.autoStaff.contains(e.getPlayer().getUniqueId().toString())) {
 			e.getPlayer().performCommand("sc");

@@ -5,10 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import me.jdog.msg.other.events.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,14 +20,9 @@ import me.jdog.msg.other.commands.StaffChat;
 import me.jdog.msg.other.commands.ToggleChat;
 import me.jdog.msg.other.commands.reload;
 import me.jdog.msg.other.config.DataManager;
-import me.jdog.msg.other.events.EventChat;
-import me.jdog.msg.other.events.EventClick;
-import me.jdog.msg.other.events.Join;
-import me.jdog.msg.other.events.Leave;
 import net.md_5.bungee.api.ChatColor;
 
 public class Main extends JavaPlugin {
-
 	public DataManager dataManager = DataManager.getInstance();
 	public Map<Player, Player> reply = new HashMap<Player, Player>();
 	public volatile boolean allowChat = true;
@@ -39,7 +36,7 @@ public class Main extends JavaPlugin {
 		msg = ChatColor.translateAlternateColorCodes('&', msg);
 		sender.sendMessage(msg);
 	}
-	
+
 	public void broadcast(String msg) {
 		msg = ChatColor.translateAlternateColorCodes('&', msg);
 		Bukkit.getServer().broadcastMessage(msg);
@@ -51,11 +48,12 @@ public class Main extends JavaPlugin {
 
 		this.eventList();
 		this.commandList();
-		this.getConfig().options().copyDefaults(true);
 		this.saveDefaultConfig();
 		this.dataManager.setup(this);
 		Options.autoStaff = this.dataManager.getData().getStringList("auto");
-		Options.autoStaff.add("dank_memed_error_fixed");
+		if (!Options.autoStaff.contains("dank_memed_error_fixed")) {
+			Options.autoStaff.add("dank_memed_error_fixed");
+		}
 		this.dataManager.getData().set("auto", Options.autoStaff);
 		this.dataManager.saveData();
 
@@ -111,9 +109,11 @@ public class Main extends JavaPlugin {
 				String targetMsg = ChatColor.translateAlternateColorCodes('&',
 						this.getConfig().getString("targetmsg").replace("%sender%", sender.getName())
 								.replace("%target%", target.getName()).replace("%msg%", msg2));
+				callEvent(new EventMessageHandler(target));
 				Main.MessageAPI(target, targetMsg);
 				this.reply.put(p, target);
 				this.reply.put(target, p);
+				callEvent(new EventMessageHandler(sender));
 				Main.MessageAPI(sender, senderMsg);
 				return true;
 			}
@@ -156,7 +156,9 @@ public class Main extends JavaPlugin {
 				String replysenderMsg = ChatColor.translateAlternateColorCodes('&',
 						this.getConfig().getString("replysendermsg").replace("%target%", r.getName())
 								.replace("%sender%", sender.getName()).replace("%msg%", msg));
+				callEvent(new EventMessageHandler(r));
 				Main.MessageAPI(r, replyMsg);
+				callEvent(new EventMessageHandler(sender));
 				Main.MessageAPI(sender, replysenderMsg);
 				return true;
 
@@ -180,11 +182,11 @@ public class Main extends JavaPlugin {
 
 		return true;
 	}
-	
+
 	public void allowChat(boolean allow) {
 		this.allowChat = allow;
 	}
-	
+
 	public boolean isChatEnabled() {
 		return this.allowChat;
 	}
@@ -203,5 +205,13 @@ public class Main extends JavaPlugin {
 		pm.registerEvents(new EventChat(this), this);
 		pm.registerEvents(new Join(this), this);
 		pm.registerEvents(new EventClick(this), this);
+		pm.registerEvents(new EventMessage(this), this);
+		pm.registerEvents(new JoinJSON(this), this);
+        pm.registerEvents(new EventDeath(this), this);
 	}
+
+	public void callEvent(Event event) {
+        Bukkit.getServer().getPluginManager().callEvent(event);
+	}
+
 }

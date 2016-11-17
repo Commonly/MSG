@@ -18,7 +18,11 @@ public class Leave implements Listener {
 	@EventHandler
 	public void onPlayerLeave(PlayerQuitEvent e) {
 		Player p = e.getPlayer();
-		plugin.reply.remove(p);
+		leaveReply(p);
+	}
+
+	public void leaveReply(Player player) {
+		plugin.reply.remove(player);
 	}
 
 }

@@ -36,8 +36,8 @@ public class reload implements CommandExecutor {
 				Main.MessageAPI(sender, "&b&m---------------&r&aMSG&b&m---------------");
 				Main.MessageAPI(sender, "&c/msg (aliases: m, t, tell)");
 				Main.MessageAPI(sender, "&c/reply (aliases: r)");
-				Main.MessageAPI(sender, "&b/mhelp - Display message help.");
-				Main.MessageAPI(sender, "&b/staffchat - Enter staffchat room.");
+				Main.MessageAPI(sender, "&c/mhelp - Display message help.");
+				Main.MessageAPI(sender, "&c/staffchat - Enter staffchat room.");
 				Main.MessageAPI(sender, "&b&m---------------&r&aMSG&b&m---------------");
 				return true;
 			}
