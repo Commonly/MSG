@@ -11,6 +11,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+/**
+* Removed in v1.8
+*/
+
 public class GuiAPI {
 	
 	private static List<String> elore = new ArrayList<String>();
