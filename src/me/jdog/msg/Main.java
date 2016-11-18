@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import me.jdog.msg.gui.GuiManager;
+import me.jdog.msg.other.network.ServerUtils;
 import me.jdog.msg.other.events.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -23,16 +25,17 @@ import me.jdog.msg.other.config.DataManager;
 import net.md_5.bungee.api.ChatColor;
 
 public class Main extends JavaPlugin {
+    public ServerUtils serverUtils = ServerUtils.getInstance();
 	public DataManager dataManager = DataManager.getInstance();
 	public Map<Player, Player> reply = new HashMap<Player, Player>();
 	public volatile boolean allowChat = true;
 
-	public static void MessageAPI(Player target, String msg) {
+	public void MessageAPI(Player target, String msg) {
 		msg = ChatColor.translateAlternateColorCodes('&', msg);
 		target.sendMessage(msg);
 	}
 
-	public static void MessageAPI(CommandSender sender, String msg) {
+	public void MessageAPI(CommandSender sender, String msg) {
 		msg = ChatColor.translateAlternateColorCodes('&', msg);
 		sender.sendMessage(msg);
 	}
@@ -45,6 +48,7 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		Logger logger = this.getLogger();
+
 
 		this.eventList();
 		this.commandList();
@@ -61,6 +65,13 @@ public class Main extends JavaPlugin {
 	}
 
 	@Override
+	public void onDisable() {
+		Logger logger = this.getLogger();
+
+        logger.info("Message has been disabled!");
+	}
+
+	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (cmd.getName().equalsIgnoreCase("msg")) {
 			if (!(sender instanceof Player)) {
@@ -68,25 +79,25 @@ public class Main extends JavaPlugin {
 				return true;
 			}
 			Player p = (Player) sender;
-			String noargsMsg = ChatColor.translateAlternateColorCodes('&', this.getConfig().getString("noargsmsg"));
+			String noargsMsg = ChatColor.translateAlternateColorCodes('&', this.getConfig().getString("msg.noargsmsg"));
 			if (args.length == 0) {
-				Main.MessageAPI(p, noargsMsg);
+				this.MessageAPI(p, noargsMsg);
 				return true;
 			}
 
 			if (args.length >= 2) {
 				String notonlineMsg = ChatColor.translateAlternateColorCodes('&',
-						this.getConfig().getString("notonlinemsg"));
+						this.getConfig().getString("msg.notonlinemsg"));
 				Player target = Bukkit.getServer().getPlayer(args[0]);
 				if (target == null) {
-					Main.MessageAPI(p, notonlineMsg);
+					this.MessageAPI(p, notonlineMsg);
 					return true;
 				}
 
 				String sendingSelf = ChatColor.translateAlternateColorCodes('&',
-						this.getConfig().getString("sendingtoself"));
+						this.getConfig().getString("msg.sendingtoself"));
 				if (target == sender) {
-					Main.MessageAPI(sender, sendingSelf);
+					this.MessageAPI(sender, sendingSelf);
 					return true;
 				}
 
@@ -104,17 +115,17 @@ public class Main extends JavaPlugin {
 				}
 
 				String senderMsg = ChatColor.translateAlternateColorCodes('&',
-						this.getConfig().getString("sendermsg").replace("%target%", target.getName())
+						this.getConfig().getString("msg.sendermsg").replace("%target%", target.getName())
 								.replace("%sender%", sender.getName()).replace("%msg%", msg2));
 				String targetMsg = ChatColor.translateAlternateColorCodes('&',
-						this.getConfig().getString("targetmsg").replace("%sender%", sender.getName())
+						this.getConfig().getString("msg.targetmsg").replace("%sender%", sender.getName())
 								.replace("%target%", target.getName()).replace("%msg%", msg2));
 				callEvent(new EventMessageHandler(target));
-				Main.MessageAPI(target, targetMsg);
+				this.MessageAPI(target, targetMsg);
 				this.reply.put(p, target);
 				this.reply.put(target, p);
 				callEvent(new EventMessageHandler(sender));
-				Main.MessageAPI(sender, senderMsg);
+				this.MessageAPI(sender, senderMsg);
 				return true;
 			}
 		}
@@ -125,9 +136,9 @@ public class Main extends JavaPlugin {
 				return true;
 			}
 
-			String noargsRep = ChatColor.translateAlternateColorCodes('&', this.getConfig().getString("noargsreply"));
+			String noargsRep = ChatColor.translateAlternateColorCodes('&', this.getConfig().getString("msg.noargsreply"));
 			if (args.length == 0) {
-				Main.MessageAPI(sender, noargsRep);
+				this.MessageAPI(sender, noargsRep);
 				return true;
 			}
 
@@ -145,21 +156,21 @@ public class Main extends JavaPlugin {
 
 				Player r = this.reply.get(sender);
 				String notonlineRep = ChatColor.translateAlternateColorCodes('&',
-						this.getConfig().getString("notonlinereply"));
+						this.getConfig().getString("msg.notonlinereply"));
 				if (r == null || !r.isOnline()) {
-					Main.MessageAPI(sender, notonlineRep);
+					this.MessageAPI(sender, notonlineRep);
 					return true;
 				}
 
-				String replyMsg = ChatColor.translateAlternateColorCodes('&', this.getConfig().getString("replymsg")
+				String replyMsg = ChatColor.translateAlternateColorCodes('&', this.getConfig().getString("msg.replymsg")
 						.replace("%sender%", sender.getName()).replace("%target%", r.getName()).replace("%msg%", msg));
 				String replysenderMsg = ChatColor.translateAlternateColorCodes('&',
-						this.getConfig().getString("replysendermsg").replace("%target%", r.getName())
+						this.getConfig().getString("msg.replysendermsg").replace("%target%", r.getName())
 								.replace("%sender%", sender.getName()).replace("%msg%", msg));
 				callEvent(new EventMessageHandler(r));
-				Main.MessageAPI(r, replyMsg);
+				this.MessageAPI(r, replyMsg);
 				callEvent(new EventMessageHandler(sender));
-				Main.MessageAPI(sender, replysenderMsg);
+				this.MessageAPI(sender, replysenderMsg);
 				return true;
 
 			}
@@ -172,10 +183,10 @@ public class Main extends JavaPlugin {
 			}
 			Player p = (Player) sender;
 			if (p.hasPermission("msg.help")) {
-				Main.MessageAPI(p, "&bMessage help >>");
-				Main.MessageAPI(p, "&b/msg (/m | /t | /tell) - Send a message to the specified person.");
-				Main.MessageAPI(p, "&b/reply (/r) - Reply to the person you last messaged.");
-				Main.MessageAPI(p, "&b/mhelp - Display message help.");
+				this.MessageAPI(p, "&bMessage help >>");
+				this.MessageAPI(p, "&b/msg (/m | /t | /tell) - Send a message to the specified person.");
+				this.MessageAPI(p, "&b/reply (/r) - Reply to the person you last messaged.");
+				this.MessageAPI(p, "&b/mhelp - Display message help.");
 			}
 			return true;
 		}
@@ -204,10 +215,10 @@ public class Main extends JavaPlugin {
 		pm.registerEvents(new Leave(this), this);
 		pm.registerEvents(new EventChat(this), this);
 		pm.registerEvents(new Join(this), this);
-		pm.registerEvents(new EventClick(this), this);
 		pm.registerEvents(new EventMessage(this), this);
 		pm.registerEvents(new JoinJSON(this), this);
         pm.registerEvents(new EventDeath(this), this);
+        pm.registerEvents(new GuiManager(), this);
 	}
 
 	public void callEvent(Event event) {

@@ -1,13 +1,13 @@
-# MSG Options
-targetmsg: '&a%sender% -> YOU -> &r&o%msg%' # The message sent to the target
-sendermsg: '&aYOU -> %target% -> &r&o%msg%' # The message sent to the sender
-replymsg: '&a%sender% -> YOU -> &r&o%msg%' # The message sent to the target [reply]
-replysendermsg: '&aYOU -> %target% -> &r&o%msg%' # The message sent to the sender [reply]
-noargsreply: '&cYou must supply a message! Usage: /r <msg>' # No arguments [reply]
-notonlinereply: '&cYou have no one to reply too!' # Not online [reply]
-noargsmsg: '&cYou must supply a player name and message! Usage: /msg <player> <msg>' # No args [msg]
-notonlinemsg: '&cThat player is not online! Usage: /msg <player> <msg>' # Not online [msg]
-sendingtoself: '&cYou cannot message yourself silly! Usage: /msg <player> <msg>' # Sending to self
+msg: # MSG Options
+  targetmsg: '&a%sender% -> YOU -> &r&o%msg%' # The message sent to the target
+  sendermsg: '&aYOU -> %target% -> &r&o%msg%' # The message sent to the sender
+  replymsg: '&a%sender% -> YOU -> &r&o%msg%' # The message sent to the target [reply]
+  replysendermsg: '&aYOU -> %target% -> &r&o%msg%' # The message sent to the sender [reply]
+  noargsreply: '&cYou must supply a message! Usage: /r <msg>' # No arguments [reply]
+  notonlinereply: '&cYou have no one to reply too!' # Not online [reply]
+  noargsmsg: '&cYou must supply a player name and message! Usage: /msg <player> <msg>' # No args [msg]
+  notonlinemsg: '&cThat player is not online! Usage: /msg <player> <msg>' # Not online [msg]
+  sendingtoself: '&cYou cannot message yourself silly! Usage: /msg <player> <msg>' # Sending to self
 use-staff-chat: true # Use the staff chat. [true or false]
 staff-chat-not-enabled: '&fUnknown command. Type "/help" for help.' # If the above is set to false then when the user exucutes /sc show them this.
 staffchat: # Staffchat options 

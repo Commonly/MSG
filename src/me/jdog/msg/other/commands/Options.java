@@ -28,7 +28,7 @@ public class Options implements CommandExecutor {
 			}
 
 			if (args.length == 0) {
-				Main.MessageAPI(sender, "&cUnknown argument! [auto]");
+				plugin.MessageAPI(sender, "&cUnknown argument! [auto]");
 				return true;
 			}
 
@@ -37,7 +37,7 @@ public class Options implements CommandExecutor {
 				autoStaff = plugin.dataManager.getData().getStringList("auto");
 
 				if (args.length == 1) {
-					Main.MessageAPI(sender, "&cUnknown arguments! [join,leave]");
+					plugin.MessageAPI(sender, "&cUnknown arguments! [join,leave]");
 					return true;
 				}
 
@@ -46,10 +46,10 @@ public class Options implements CommandExecutor {
 						autoStaff.add(p.getUniqueId().toString());
 						plugin.dataManager.getData().set("auto", autoStaff);
 						plugin.dataManager.saveData();
-						Main.MessageAPI(sender, "&cYou were added to the auto staffchat list!");
+						plugin.MessageAPI(sender, "&cYou were added to the auto staffchat list!");
 						return true;
 					} else if (autoStaff.contains(p.getUniqueId().toString())) {
-						Main.MessageAPI(sender, "&cYou're already added to the auto staffchat list!");
+						plugin.MessageAPI(sender, "&cYou're already added to the auto staffchat list!");
 						return true;
 					}
 				} else if (args[1].equalsIgnoreCase("leave")) {
@@ -58,19 +58,19 @@ public class Options implements CommandExecutor {
 						autoStaff.remove(p.getUniqueId().toString());
 						plugin.dataManager.getData().set("auto", autoStaff);
 						plugin.dataManager.saveData();
-						Main.MessageAPI(sender, "&cYou were removed from the auto staffchat list!");
+						plugin.MessageAPI(sender, "&cYou were removed from the auto staffchat list!");
 						return true;
 					} else if (!autoStaff.contains(p.getUniqueId().toString())) {
-						Main.MessageAPI(sender, "&cYou're not on the auto staffchat list!");
+						plugin.MessageAPI(sender, "&cYou're not on the auto staffchat list!");
 						return true;
 					}
 				} else {
-					Main.MessageAPI(sender, "&cUnknown arguments! [join,leave]");
+					plugin.MessageAPI(sender, "&cUnknown arguments! [join,leave]");
 					return true;
 				}
 
 			} else {
-				Main.MessageAPI(sender, "&cUnknown argument! [auto]");
+				plugin.MessageAPI(sender, "&cUnknown argument! [auto]");
 				return true;
 			}
 

@@ -38,13 +38,13 @@ public class StaffChat implements CommandExecutor {
 			if (!sc.contains(p) && plugin.getConfig().getBoolean("use-staff-chat") == true) {
 				sc.add(p);
 				chat.add(p);
-				Main.MessageAPI(p, scEnabled);
+				plugin.MessageAPI(p, scEnabled);
 				return true;
 			}
 			if (plugin.getConfig().getBoolean("use-staff-chat") == true) {
 				sc.remove(p);
 				chat.remove(p);
-				Main.MessageAPI(p, scDisabled);
+				plugin.MessageAPI(p, scDisabled);
 				return true;
 			} else {
 				sender.sendMessage(notEnabled);

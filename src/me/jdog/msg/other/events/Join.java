@@ -1,5 +1,6 @@
 package me.jdog.msg.other.events;
 
+import me.jdog.msg.gui.GuiManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -21,8 +22,9 @@ public class Join implements Listener {
 			return;
 		if (Options.autoStaff.contains(e.getPlayer().getUniqueId().toString())) {
 			e.getPlayer().performCommand("sc");
-			Main.MessageAPI(e.getPlayer(), "&cYou were automaticly put in staffchat!");
+			plugin.MessageAPI(e.getPlayer(), "&cYou were automaticly put in staffchat!");
 		}
+
 	}
 
 }

@@ -1,5 +1,5 @@
 name: MSG
-version: 1.7
+version: 1.8
 main: me.jdog.msg.Main
 author: Muricans
 commands:
